@@ -1,9 +1,9 @@
 # BuildVu PHP Client #
-Convert PDF to HTML5 or SVG with PHP, using the BuildVu PHP Client to interact with IDRsolutions' [BuildVu PHP Client](https://github.com/idrsolutions/idrsolutions-php-client/README-BUILDVU.md).
+Convert PDF to HTML5 or SVG with PHP, using the BuildVu PHP Client to interact with IDRsolutions' [BuildVu PHP Client](https://github.com/idrsolutions/idrsolutions-php-client/blob/master/README-BUILDVU.md).
 
 # JPEDAL PHP Client #
 
-Convert PDF to images, using the JPedal PHP Client to interact with IDRsolutions' [JPedal PHP Client](https://github.com/idrsolutions/idrsolutions-php-client/README-JPEDAL.md).
+Convert PDF to images, using the JPedal PHP Client to interact with IDRsolutions' [JPedal PHP Client](https://github.com/idrsolutions/idrsolutions-php-client/blob/master/README-JPEDAL.md).
 
 
 
