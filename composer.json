@@ -1,0 +1,20 @@
+{
+    "name": "idrsolutions/idrsolutions-php-client",
+    "description": "IDRSolutions PHP Client is the PHP API for IDRsolutions' BuildVu or JPedal Microservice Example",
+    "type": "library",
+    "license": "Apache-2.0",
+    "keywords" : ["idrsolutions", "pdf", "html5", "converter", "buildvu", "jpedal", "images", "microservice", "example", "web", "application", "server", "API", "php", "client"],
+    "authors": [
+        {
+            "name": "IDRsolutions (https://www.idrsolutions.com)"
+        }
+    ],
+    "require": {
+        "php": ">= 5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "IDRsolutions\\IDRCloudClient\\": "src/"
+        }
+    }
+}
