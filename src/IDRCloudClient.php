@@ -2,9 +2,15 @@
 
 namespace idrsolutions;
 
-if(!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'r'));
-if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
-if(!defined('STDERR')) define('STDERR', fopen('php://stderr', 'w'));
+if (!defined('STDIN')) {
+    define('STDIN', fopen('php://stdin', 'r'));
+}
+if (!defined('STDOUT')) {
+    define('STDOUT', fopen('php://stdout', 'w'));
+}
+if (!defined('STDERR')) {
+    define('STDERR', fopen('php://stderr', 'w'));
+}
 
 class IDRCloudClient {
 
@@ -64,35 +70,38 @@ class IDRCloudClient {
         }
     }
 
-    private static function createContext($opt) {
-        
-        $parameters = $opt[self::KEY_PARAMETERS];
+    private static function addAuthorizationHeader(&$headers, $username, $password) {
+        $authorization = "Authorization: Basic " . base64_encode($username . ':' . $password);
+        array_push($headers, $authorization);
+    }
 
+    private static function createContext($opt) {
+        $parameters = $opt[self::KEY_PARAMETERS];
         if ($parameters[self::KEY_INPUT] === self::INPUT_UPLOAD) {
-            if(array_key_exists(self::KEY_FILE_PATH, $parameters)) {
+            if (array_key_exists(self::KEY_FILE_PATH, $parameters)) {
                 $filePath = $parameters[self::KEY_FILE_PATH];
             }
-            $multipart_Boundary = '--------------------------'.microtime(true);
-            $header = 'Content-Type: multipart/form-data; boundary=' .$multipart_Boundary;
+            $multipart_Boundary = '--------------------------' . microtime(true);
+            $header = 'Content-Type: multipart/form-data; boundary=' . $multipart_Boundary;
             $content = self::generateMultipartContent($parameters, $filePath, $multipart_Boundary);
-        }
-        else {
+        } else {
             $content = http_build_query($parameters);
-            $header = "Content-Type: application/x-www-form-urlencoded\r\nContent-Length: ".strlen($content);
+            $header = "Content-Type: application/x-www-form-urlencoded\r\nContent-Length: " . strlen($content);
         }
-
+        $headers = array($header);
+        if (array_key_exists(self::KEY_USERNAME, $parameters) && array_key_exists(self::KEY_PASSWORD, $parameters)) {
+            self::addAuthorizationHeader($headers, $parameters[self::KEY_USERNAME], $parameters[self::KEY_PASSWORD]);
+        }
         $options = array(
             'http' => array(
                 'method' => 'POST',
                 'TIMEOUT' => self::TIMEOUT,
                 'ignore_errors' => TRUE,
-                'header' => $header,
-                'content' => $content
-            )
-        );
+                'header' => $headers,
+                'content' => $content));
         return stream_context_create($options);
     }
-    
+
     private static function generateMultipartContent($parameters, $filePath, $multipartBoundary) {
         
         $form_field = "file";
@@ -114,14 +123,30 @@ class IDRCloudClient {
         return $content . "--\r\n";
     }
 
-    private static function poll($endpoint, $result) {
+    private static function createBasicAuthenticationContext($username, $password) {
+        $headers = array();
+        self::addAuthorizationHeader($headers, $username, $password);
+        $options = array(
+            "http" => array(
+                "header" => $headers
+            )
+        );
+        return stream_context_create($options);
+    }
+
+    private static function poll($endpoint, $result, $parameters) {
 
         $json = json_decode($result, true);
         $retries = 0;
         $data = array('state' => '');
 
         while ($data['state'] !== 'processed') {
-            $result = file_get_contents($endpoint . '?uuid=' . $json['uuid']);
+            if (array_key_exists(self::KEY_USERNAME, $parameters) && array_key_exists(self::KEY_PASSWORD, $parameters)) {
+                $context = self::createBasicAuthenticationContext($parameters[self::KEY_USERNAME], $parameters[self::KEY_PASSWORD]);
+            } else {
+                $context = stream_context_create();}
+
+            $result = file_get_contents($endpoint . '?uuid=' . $json['uuid'], false, $context);
             if (!$result) {    // ERROR
                 if ($retries > 3) {
                     self::exitWithError('Failed to convert.');
@@ -140,9 +165,14 @@ class IDRCloudClient {
         }
     }
 
-    private static function download($downloadUrl, $outputDir, $filename) {
+    private static function download($downloadUrl, $outputDir, $filename, $username, $password) {
         $fullOutputPath = $outputDir . $filename;
-        file_put_contents($fullOutputPath, fopen($downloadUrl, 'r'));
+        if ($username != null && $password != null) {
+            $context = self::createBasicAuthenticationContext($username, $password);
+        } else {
+            $context = stream_context_create();
+        }
+        file_put_contents($fullOutputPath, file_get_contents($downloadUrl, false, $context));
     }
 
     private static function exitWithError($printStr, $errCode = 0) {
@@ -155,17 +185,19 @@ class IDRCloudClient {
      * 
      * @param type $results The server response generated from the convert method
      * @param type $outputDir The directory where the output will be saved
-     * @param type $filename (optional) A filename for the downloaded zip file
+     * @param type $filename (optional) A filename for the downloaded zip file or null to use preset value
+     * @param type $username (optional) Username to use if HTTP Authentication is enabled on the server
+     * @param type $password (optional) Password to use if HTTP Authentication is enabled on the server
      */
-    public static function downloadOutput($results, $outputDir, $filename = null) {
-        
+    public static function downloadOutput($results, $outputDir, $filename = null, $username = null, $password = null) {
+
         $downloadUrl = $results['downloadUrl'];
         
         if ($filename == null) {
             $filename = pathinfo($downloadUrl)['basename'];
         }
         
-        self::download($downloadUrl, $outputDir, $filename);
+        self::download($downloadUrl, $outputDir, $filename, $username, $password);
     }
 
     /**
@@ -179,7 +211,6 @@ class IDRCloudClient {
         self::validateInput($opt);
         $endpoint = $opt[self::KEY_ENDPOINT];
         $context = self::createContext($opt);
-
         $result = file_get_contents($endpoint, false, $context);
         $http_response = substr($http_response_header[0], 9, 3);
         if ($http_response !== '200') { //Check http response code for if the request failed
@@ -188,7 +219,7 @@ class IDRCloudClient {
                 if(array_key_exists('error',$decoded)) {
                     self::exitWithError("http error code " . $http_response . ": " . $decoded['error'], $http_response ); //Exit with the error provided
                 } else {
-                    self::exitWithError('Failed to upload.');
+                    self::exitWithError('Failed to upload. HTTP Status: ' . $http_response . ". " . $result, $http_response);
                 }
             } else {
                 self::exitWithError('Failed to upload.');
@@ -198,6 +229,6 @@ class IDRCloudClient {
         if (array_key_exists('callbackUrl', $opt[self::KEY_PARAMETERS])) {
             return array('state'=>'queued');
         }
-        return self::poll($endpoint, $result);
+        return self::poll($endpoint, $result, $opt[self::KEY_PARAMETERS]);
     }
 }
