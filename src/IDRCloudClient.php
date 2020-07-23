@@ -2,15 +2,12 @@
 
 namespace idrsolutions;
 
-if (!defined('STDIN')) {
-    define('STDIN', fopen('php://stdin', 'r'));
-}
-if (!defined('STDOUT')) {
-    define('STDOUT', fopen('php://stdout', 'w'));
-}
-if (!defined('STDERR')) {
-    define('STDERR', fopen('php://stderr', 'w'));
-}
+if (!defined('STDIN'))  define('STDIN', fopen('php://stdin', 'r'));
+
+if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
+
+if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'w'));
+
 
 class IDRCloudClient {
 
@@ -27,7 +24,7 @@ class IDRCloudClient {
     const INPUT_DOWNLOAD = 'download';
     const INPUT_JPEDAL = 'jpedal';
     const INPUT_BUILDVU = 'buildvu';
-
+    
     private static function progress($r) {
         fwrite(STDOUT, json_encode($r, JSON_PRETTY_PRINT) . "\r\n");
     }
@@ -76,19 +73,22 @@ class IDRCloudClient {
     }
 
     private static function createContext($opt) {
+        
         $parameters = $opt[self::KEY_PARAMETERS];
+        
         if ($parameters[self::KEY_INPUT] === self::INPUT_UPLOAD) {
             if (array_key_exists(self::KEY_FILE_PATH, $parameters)) {
                 $filePath = $parameters[self::KEY_FILE_PATH];
             }
             $multipart_Boundary = '--------------------------' . microtime(true);
-            $header = 'Content-Type: multipart/form-data; boundary=' . $multipart_Boundary;
+            $contentType = 'Content-Type: multipart/form-data; boundary=' . $multipart_Boundary;
             $content = self::generateMultipartContent($parameters, $filePath, $multipart_Boundary);
         } else {
             $content = http_build_query($parameters);
-            $header = "Content-Type: application/x-www-form-urlencoded\r\nContent-Length: " . strlen($content);
+            $contentType = "Content-Type: application/x-www-form-urlencoded\r\nContent-Length: " . strlen($content);
         }
-        $headers = array($header);
+        $headers = array($contentType);
+        
         if (array_key_exists(self::KEY_USERNAME, $parameters) && array_key_exists(self::KEY_PASSWORD, $parameters)) {
             self::addAuthorizationHeader($headers, $parameters[self::KEY_USERNAME], $parameters[self::KEY_PASSWORD]);
         }
@@ -98,7 +98,9 @@ class IDRCloudClient {
                 'TIMEOUT' => self::TIMEOUT,
                 'ignore_errors' => TRUE,
                 'header' => $headers,
-                'content' => $content));
+                'content' => $content
+                )
+            );
         return stream_context_create($options);
     }
 
@@ -127,8 +129,8 @@ class IDRCloudClient {
         $headers = array();
         self::addAuthorizationHeader($headers, $username, $password);
         $options = array(
-            "http" => array(
-                "header" => $headers
+            'http' => array(
+                'header' => $headers
             )
         );
         return stream_context_create($options);
@@ -144,7 +146,8 @@ class IDRCloudClient {
             if (array_key_exists(self::KEY_USERNAME, $parameters) && array_key_exists(self::KEY_PASSWORD, $parameters)) {
                 $context = self::createBasicAuthenticationContext($parameters[self::KEY_USERNAME], $parameters[self::KEY_PASSWORD]);
             } else {
-                $context = stream_context_create();}
+                $context = stream_context_create();
+            }
 
             $result = file_get_contents($endpoint . '?uuid=' . $json['uuid'], false, $context);
             if (!$result) {    // ERROR
@@ -198,7 +201,7 @@ class IDRCloudClient {
         }
         
         self::download($downloadUrl, $outputDir, $filename, $username, $password);
-    }
+            }
 
     /**
      * Start a conversion of a file for a MicroService server
@@ -211,12 +214,13 @@ class IDRCloudClient {
         self::validateInput($opt);
         $endpoint = $opt[self::KEY_ENDPOINT];
         $context = self::createContext($opt);
+        
         $result = file_get_contents($endpoint, false, $context);
         $http_response = substr($http_response_header[0], 9, 3);
         if ($http_response !== '200') { //Check http response code for if the request failed
             if ($result !== false) { //If a text response was given
                 $decoded = json_decode($result, true);//Decode the json
-                if(array_key_exists('error',$decoded)) {
+                if(is_array($decoded) && array_key_exists('error',$decoded)) {
                     self::exitWithError("http error code " . $http_response . ": " . $decoded['error'], $http_response ); //Exit with the error provided
                 } else {
                     self::exitWithError('Failed to upload. HTTP Status: ' . $http_response . ". " . $result, $http_response);
