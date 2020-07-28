@@ -19,6 +19,8 @@ class IDRCloudClient {
     const KEY_INPUT = 'input';
     const KEY_FILE_PATH = 'file';
     const KEY_CONVERSION_URL = 'url';
+    const KEY_USERNAME = 'username';
+    const KEY_PASSWORD = 'password';
     
     const INPUT_UPLOAD = 'upload';
     const INPUT_DOWNLOAD = 'download';
