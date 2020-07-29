@@ -39,11 +39,7 @@ class IDRCloudClient {
                 'error' => $r['error'])
             );
         } elseif ($r['state'] === 'processed') {
-            self::progress(array(
-                'state' => $r['state'],
-                'previewUrl' => $r['previewUrl'],
-                'downloadUrl' => $r['downloadUrl'])
-            );
+            self::progress($r);
         } else {
             self::progress(array(
                 'state' => $r['state'])
@@ -162,6 +158,8 @@ class IDRCloudClient {
                 if ($data['state'] === 'processed') {
                     self::handleProgress($data);
                     return $data;  // SUCCESS
+                } elseif ($data['state'] === 'error') {
+                    self::exitWithError("Error in conversion: \r\n" . var_export($data, true));
                 }
 
                 self::handleProgress($data);
