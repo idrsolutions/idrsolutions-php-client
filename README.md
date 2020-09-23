@@ -1,9 +1,32 @@
-# BuildVu PHP Client #
-Convert PDF to HTML5 or SVG with PHP, using the BuildVu PHP Client to interact with IDRsolutions' [BuildVu PHP Client](https://github.com/idrsolutions/idrsolutions-php-client/blob/master/README-BUILDVU.md).
+# IDRSolutions NodeJS Client #
 
-# JPEDAL PHP Client #
+Interact with any [IDRsolutions' Microservice Examples](https://github.com/idrsolutions/) using the IDRSolutions NodeJS Client.
 
-Convert PDF to images, using the JPedal PHP Client to interact with IDRsolutions' [JPedal PHP Client](https://github.com/idrsolutions/idrsolutions-php-client/blob/master/README-JPEDAL.md).
+The IDRsolutions Microservice Examples are open source projects that allows you to
+convert PDFs using various softwares from [IDRSolutions](https://www.idrsolutions.com/) as an online service.
+
+IDR Solutions offer a free trial service for running these libraries with NodeJS. You can
+find information at the following links for [JPedal](https://www.idrsolutions.com/jpedal/) and [BuildVu](https://www.idrsolutions.com/buildvu/).
+
+-----
+
+# Installation #
+
+```
+composer require idrsolutions/idrsolutions-php-client
+```
+
+-----
+
+# Usage #
+
+## BuildVu #
+
+Full usage for connecting to [BuildVu can be found here](README-BUILDVU.md).
+
+## JPedal #
+
+Full usage for connecting to [JPedal can be found here](README-JPEDAL.md).
 
 
 
@@ -11,7 +34,7 @@ Convert PDF to images, using the JPedal PHP Client to interact with IDRsolutions
 
 Found a bug, or have a suggestion / improvement? Let us know through the Issues page.
 
-Got questions? You can contact us [here](https://idrsolutions.zendesk.com/hc/en-us/requests/new).
+Got questions? You can contact us [here](https://idrsolutions.atlassian.net/servicedesk/customer/portal/8).
 
 -----
 
