@@ -1,11 +1,11 @@
 # IDRSolutions PHP Client #
 
-Interact with any [IDRsolutions' Microservice Examples](https://github.com/idrsolutions/) using the IDRSolutions NodeJS Client.
+Interact with any [IDRsolutions' Microservice Examples](https://github.com/idrsolutions/) using the IDRSolutions PHP Client.
 
 The IDRsolutions Microservice Examples are open source projects that allows you to
 convert PDFs using various softwares from [IDRSolutions](https://www.idrsolutions.com/) as an online service.
 
-IDR Solutions offer a free trial service for running these libraries with NodeJS. You can
+IDR Solutions offer a free trial service for running these libraries with PHP. You can
 find information at the following links for [JPedal](https://www.idrsolutions.com/jpedal/) and [BuildVu](https://www.idrsolutions.com/buildvu/).
 
 -----
@@ -22,11 +22,11 @@ composer require idrsolutions/idrsolutions-php-client
 
 ## BuildVu #
 
-Full usage for connecting to [BuildVu can be found here](README-BUILDVU.md).
+Full usage for connecting to [BuildVu can be found here](https://support.idrsolutions.com/buildvu/tutorials/cloud/).
 
 ## JPedal #
 
-Full usage for connecting to [JPedal can be found here](README-JPEDAL.md).
+Full usage for connecting to [JPedal can be found here](https://support.idrsolutions.com/jpedal/tutorials/cloud/).
 
 
 
