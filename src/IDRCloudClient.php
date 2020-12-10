@@ -26,6 +26,7 @@ class IDRCloudClient {
     const INPUT_DOWNLOAD = 'download';
     const INPUT_JPEDAL = 'jpedal';
     const INPUT_BUILDVU = 'buildvu';
+    const INPUT_FORMVU = 'formvu';
     
     private static function progress($r) {
         fwrite(STDOUT, json_encode($r, JSON_PRETTY_PRINT) . "\r\n");
