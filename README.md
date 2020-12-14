@@ -5,8 +5,14 @@ Interact with any [IDRsolutions' Microservice Examples](https://github.com/idrso
 The IDRsolutions Microservice Examples are open source projects that allows you to
 convert PDFs using various softwares from [IDRSolutions](https://www.idrsolutions.com/) as an online service.
 
-IDR Solutions offer a free trial service for running these libraries with PHP. You can
-find information at the following links for [JPedal](https://www.idrsolutions.com/jpedal/) and [BuildVu](https://www.idrsolutions.com/buildvu/).
+JPedal Microservice Example - Convert pages to images
+
+BuildVu Microservice Example - Convert PDFs to HTML or SVG
+
+FormVu Microservice Example - Convert PDF Forms to HTML
+
+IDR Solutions offer a free trial service for running these libraries with NodeJS. You can
+find information at the following links for [JPedal](https://www.idrsolutions.com/jpedal/), [BuildVu](https://www.idrsolutions.com/buildvu/), and [FormVu](https://www.idrsolutions.com/formvu/).
 
 -----
 
@@ -28,6 +34,11 @@ Full usage for connecting to [BuildVu can be found here](https://support.idrsolu
 
 Full usage for connecting to [JPedal can be found here](https://support.idrsolutions.com/jpedal/tutorials/cloud/).
 
+## FormVu #
+
+Full usage for connecting to [FormVu can be found here](https://support.idrsolutions.com/formvu/tutorials/cloud/).
+
+-----
 
 
 # Who do I talk to? #
