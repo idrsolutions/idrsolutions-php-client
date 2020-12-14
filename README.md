@@ -11,7 +11,7 @@ BuildVu Microservice Example - Convert PDFs to HTML or SVG
 
 FormVu Microservice Example - Convert PDF Forms to HTML
 
-IDR Solutions offer a free trial service for running these libraries with NodeJS. You can
+IDR Solutions offer a free trial service for running these libraries with PHP. You can
 find information at the following links for [JPedal](https://www.idrsolutions.com/jpedal/), [BuildVu](https://www.idrsolutions.com/buildvu/), and [FormVu](https://www.idrsolutions.com/formvu/).
 
 -----
