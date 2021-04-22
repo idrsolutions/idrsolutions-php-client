@@ -1,6 +1,6 @@
 <?php
 
-namespace idrsolutions;
+namespace IDRsolutions;
 
 if (!defined('STDIN'))  define('STDIN', fopen('php://stdin', 'r'));
 
