@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/PATH/TO/vendor/autoload.php";
 
-use idrsolutions\IDRCloudClient;
+use IDRsolutions\IDRCloudClient;
 
 // Append INPUT_BUILDVU or INPUT_JPEDAL in the URL depending on which microservice you re using
 
