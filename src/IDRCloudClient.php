@@ -12,7 +12,7 @@ if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'w'));
 class IDRCloudClient {
 
     const POLL_INTERVAL = 500; //ms
-    const TIMEOUT = 10;  // seconds
+    const DEFAULT_TIMEOUT = 10;  // seconds
 
     const KEY_ENDPOINT = 'endpoint';
     const KEY_PARAMETERS = 'parameters';
@@ -21,6 +21,8 @@ class IDRCloudClient {
     const KEY_CONVERSION_URL = 'url';
     const KEY_USERNAME = 'username';
     const KEY_PASSWORD = 'password';
+    const KEY_REQUEST_TIMEOUT = 'request-timeout';
+    const KEY_CONVERSION_TIMEOUT = 'conversion-timeout';
     
     const INPUT_UPLOAD = 'upload';
     const INPUT_DOWNLOAD = 'download';
@@ -93,7 +95,7 @@ class IDRCloudClient {
         $options = array(
             'http' => array(
                 'method' => 'POST',
-                'TIMEOUT' => self::TIMEOUT,
+                'timeout' => (array_key_exists(self::KEY_REQUEST_TIMEOUT, $opt)) ? $opt[self::KEY_REQUEST_TIMEOUT] : self::DEFAULT_TIMEOUT,
                 'ignore_errors' => TRUE,
                 'header' => $headers,
                 'content' => $content
@@ -134,10 +136,11 @@ class IDRCloudClient {
         return stream_context_create($options);
     }
 
-    private static function poll($endpoint, $result, $parameters) {
+    private static function poll($endpoint, $result, $parameters, $conversion_timeout) {
 
         $json = json_decode($result, true);
         $retries = 0;
+        $duration = 0;
         $data = array('state' => '');
 
         while ($data['state'] !== 'processed') {
@@ -164,6 +167,11 @@ class IDRCloudClient {
 
                 self::handleProgress($data);
                 usleep(self::POLL_INTERVAL * 1000);
+                $duration += (self::POLL_INTERVAL / 1000);
+
+                if ($conversion_timeout && $duration > $conversion_timeout) {
+                    self::exitWithError('Conversion timeout reached.');
+                }
             }
         }
     }
@@ -233,6 +241,11 @@ class IDRCloudClient {
         if (array_key_exists('callbackUrl', $opt[self::KEY_PARAMETERS])) {
             return array('state'=>'queued');
         }
-        return self::poll($endpoint, $result, $opt[self::KEY_PARAMETERS]);
+        return self::poll(
+            $endpoint,
+            $result,
+            $opt[self::KEY_PARAMETERS],
+            (array_key_exists(self::KEY_CONVERSION_TIMEOUT, $opt)) ? $opt[self::KEY_CONVERSION_TIMEOUT] : false
+        );
     }
 }
