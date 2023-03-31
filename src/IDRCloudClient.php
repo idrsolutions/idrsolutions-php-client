@@ -23,7 +23,7 @@ class IDRCloudClient {
     const KEY_PASSWORD = 'password';
     const KEY_REQUEST_TIMEOUT = 'request-timeout';
     const KEY_CONVERSION_TIMEOUT = 'conversion-timeout';
-    const KEY_PROGRESS_CALLBACK = "progress-callback";
+    const KEY_PROGRESS_CALLBACK = 'progress-callback';
 
     const INPUT_UPLOAD = 'upload';
     const INPUT_DOWNLOAD = 'download';
@@ -251,7 +251,7 @@ class IDRCloudClient {
             $result,
             $opt[self::KEY_PARAMETERS],
             (array_key_exists(self::KEY_CONVERSION_TIMEOUT, $opt)) ? $opt[self::KEY_CONVERSION_TIMEOUT] : false,
-            isset($opt[self::KEY_PROGRESS_CALLBACK]) ? $opt[self::KEY_PROGRESS_CALLBACK] : null
+            (array_key_exists(self::KEY_PROGRESS_CALLBACK, $opt)) ? $opt[self::KEY_PROGRESS_CALLBACK] : null
         );
     }
 }
