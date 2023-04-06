@@ -23,7 +23,8 @@ class IDRCloudClient {
     const KEY_PASSWORD = 'password';
     const KEY_REQUEST_TIMEOUT = 'request-timeout';
     const KEY_CONVERSION_TIMEOUT = 'conversion-timeout';
-    
+    const KEY_PROGRESS_CALLBACK = 'progress-callback';
+
     const INPUT_UPLOAD = 'upload';
     const INPUT_DOWNLOAD = 'download';
     const INPUT_JPEDAL = 'jpedal';
@@ -137,7 +138,7 @@ class IDRCloudClient {
         return stream_context_create($options);
     }
 
-    private static function poll($endpoint, $result, $parameters, $conversion_timeout) {
+    private static function poll($endpoint, $result, $parameters, $conversion_timeout, $progressCallback = null) {
 
         $json = json_decode($result, true);
         $retries = 0;
@@ -167,6 +168,9 @@ class IDRCloudClient {
                 }
 
                 self::handleProgress($data);
+                if (is_callable($progressCallback)) {
+                    call_user_func($progressCallback, $data);
+                }
                 usleep(self::POLL_INTERVAL * 1000);
                 $duration += (self::POLL_INTERVAL / 1000);
 
@@ -246,7 +250,8 @@ class IDRCloudClient {
             $endpoint,
             $result,
             $opt[self::KEY_PARAMETERS],
-            (array_key_exists(self::KEY_CONVERSION_TIMEOUT, $opt)) ? $opt[self::KEY_CONVERSION_TIMEOUT] : false
+            (array_key_exists(self::KEY_CONVERSION_TIMEOUT, $opt)) ? $opt[self::KEY_CONVERSION_TIMEOUT] : false,
+            (array_key_exists(self::KEY_PROGRESS_CALLBACK, $opt)) ? $opt[self::KEY_PROGRESS_CALLBACK] : null
         );
     }
 }
