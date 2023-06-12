@@ -1,0 +1,12 @@
+                       IDRSolutons PHP Client
+                       ======================
+
+Please visit the IDRSolutions site to get a token to access the IDRSolutions hosted service:
+  * https://www.idrsolutions.com/
+
+Alternatively, you can use one of the example microservices to set up your own service to connect to.
+  * https://github.com/idrsolutions/buildvu-microservice-example
+  * https://github.com/idrsolutions/formvu-microservice-example
+  * https://github.com/idrsolutions/jpedal-microservice-example
+
+Copyright 2020 - 2023 IDRsolutions
