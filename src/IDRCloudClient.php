@@ -1,7 +1,7 @@
 <?php
 
 /**
- * IDRCloudCLient.php
+ * IDRCloudClient.php
  *
  * Client for interacting with the IDRSolutions Microservice.
  *
