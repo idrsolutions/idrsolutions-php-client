@@ -1,0 +1,9 @@
+                        IDRSolutions PHP Client
+                        =======================
+
+A C# native client for access the IDRSolutions microservices:
+  * https://github.com/idrsolutions/buildvu-microservice-example
+  * https://github.com/idrsolutions/formvu-microservice-example
+  * https://github.com/idrsolutions/jpedal-microservice-example
+
+Copyright 2020 - 2023 IDRsolutions

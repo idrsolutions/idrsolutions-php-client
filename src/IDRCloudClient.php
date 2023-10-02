@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * IDRCloudCLient.php
+ *
+ * Client for interacting with the IDRSolutions Microservice.
+ *
+ * @author     IDRSolutions
+ * @license    https://github.com/idrsolutions/idrsolutions-php-client/blob/master/LICENSE.txt  Apache License 2.0
+ */
+
 namespace IDRsolutions;
 
 if (!defined('STDIN'))  define('STDIN', fopen('php://stdin', 'r'));
