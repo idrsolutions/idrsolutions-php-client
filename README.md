@@ -28,15 +28,15 @@ composer require idrsolutions/idrsolutions-php-client
 
 ## BuildVu #
 
-Full usage for connecting to [BuildVu can be found here](https://support.idrsolutions.com/buildvu/tutorials/cloud/).
+Full usage for connecting to [BuildVu can be found here](https://www.idrsolutions.com/docs/buildvu/tutorials/cloud/).
 
 ## JPedal #
 
-Full usage for connecting to [JPedal can be found here](https://support.idrsolutions.com/jpedal/tutorials/cloud/).
+Full usage for connecting to [JPedal can be found here]([https://support.idrsolutions.com](https://www.idrsolutions.com/docs/jpedal/tutorials/cloud/).
 
 ## FormVu #
 
-Full usage for connecting to [FormVu can be found here](https://support.idrsolutions.com/formvu/tutorials/cloud/).
+Full usage for connecting to [FormVu can be found here]([https://support.idrsolutions.com/](https://www.idrsolutions.com/docs/formvu/tutorials/cloud/).
 
 -----
 
